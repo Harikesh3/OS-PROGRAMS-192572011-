@@ -12,7 +12,7 @@ int main() {
     int number_of_process;
     int total = 0;
     struct priority_scheduling temp_process;
-    int ASCII_number = 65;  // 'A' starts from ASCII 65
+    int ASCII_number = 65; 
     int position;
     float average_waiting_time;
     float average_turnaround_time;
@@ -33,10 +33,8 @@ int main() {
         printf("Enter the priority: ");
         scanf("%d", &process[i].priority);
 
-        ASCII_number++; // Move to next process name (A, B, C...)
+        ASCII_number++;
     }
-
-    // Sorting based on priority (Higher priority number executes first)
     for (int i = 0; i < number_of_process; i++) {
         position = i;
         for (int j = i + 1; j < number_of_process; j++) {
@@ -48,9 +46,7 @@ int main() {
         process[position] = temp_process;
     }
 
-    process[0].waiting_time = 0;  // First process always has 0 waiting time
-
-    // Waiting time calculation
+    process[0].waiting_time = 0;
     for (int i = 1; i < number_of_process; i++) {
         process[i].waiting_time = 0;
         for (int j = 0; j < i; j++) {
