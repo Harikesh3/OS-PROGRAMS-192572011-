@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
+int main() {
+    int fd, flags;
+    char buf[50];
+    struct stat st;
+    DIR *d;
+    struct dirent *de;
+    fd = open("demo.txt", O_CREAT | O_RDWR, 0644);
+    write(fd, "Unix IO System Calls\n", 21);
+    lseek(fd, 0, SEEK_SET);
+    read(fd, buf, sizeof(buf));
+    write(1, buf, 21);
+    flags = fcntl(fd, F_GETFL);
+    printf("\nFile flags: %d\n", flags);
+    stat("demo.txt", &st);
+    printf("File size: %ld bytes\n", st.st_size);
+    d = opendir(".");
+    while((de = readdir(d)) != NULL)
+        printf("%s\n", de->d_name);
+    closedir(d);
+    close(fd);
+    return 0;
+}
