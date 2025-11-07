@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+    FILE *fp;
+    char data[100];
+    fp = fopen("file.txt", "w");
+    fprintf(fp, "This is a file management demo.\n");
+    fclose(fp);
+    fp = fopen("file.txt", "r");
+    while(fgets(data, 100, fp) != NULL)
+        printf("%s", data);
+    fclose(fp);
+    fp = fopen("file.txt", "a");
+    fprintf(fp, "Appending some text.\n");
+    fclose(fp);
+    fp = fopen("file.txt", "r");
+    while(fgets(data, 100, fp) != NULL)
+        printf("%s", data);
+    fclose(fp);
+    remove("file.txt");
+    printf("File deleted.\n");
+    return 0;
+}
