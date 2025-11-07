@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+sem_t rw;
+pthread_mutex_t mutex;
+int count = 0, data = 0;
+void* reader() {
+    for(;;) {
+        pthread_mutex_lock(&mutex);
+        count++;
+        if(count == 1)
+            sem_wait(&rw);
+        pthread_mutex_unlock(&mutex);
+
+        printf("Reader reads: %d\n", data);
+        sleep(1);
+
+        pthread_mutex_lock(&mutex);
+        count--;
+        if(count == 0)
+            sem_post(&rw);
+        pthread_mutex_unlock(&mutex);
+    }
+}
+void* writer() {
+    for(;;) {
+        sem_wait(&rw);
+        data++;
+        printf("Writer writes: %d\n", data);
+        sem_post(&rw);
+        sleep(1);
+    }
+}
+int main() {
+    pthread_t r1, r2, w1;
+    sem_init(&rw, 0, 1);
+    pthread_mutex_init(&mutex, NULL);
+    pthread_create(&w1, NULL, writer, NULL);
+    pthread_create(&r1, NULL, reader, NULL);
+    pthread_create(&r2, NULL, reader, NULL);
+    pthread_join(w1, NULL);
+    pthread_join(r1, NULL);
+    pthread_join(r2, NULL);
+}
